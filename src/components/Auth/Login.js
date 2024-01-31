@@ -9,11 +9,17 @@ const Login = () => {
 
   const API_KEY =  'AIzaSyDe422vlAnqibSzAxFe3D3N7eFp2hQxxbg'
   const URL_SIGNUP = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`
+  const URL_LOGIN = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${API_KEY}`
 
+const handleChange = (e) =>{
+    setError('')
+    setUser({...user,[e.target.name]:e.target.value})
+}
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log('Logging in with:', user);
+    if(!isSignup){
      if(user.password === user.confirmPassword){
         try{
           let response = await fetch(`${URL_SIGNUP}`,{
@@ -25,18 +31,47 @@ const Login = () => {
             }),
             headers:{'Content-Type':'application/json'}
           })
+          let data = await response.json()
           if(response.ok){
             alert('Signup successful!')
             console.log('res--',response)
+          
+            console.log('data--',data)
           }else{
-            setError('something wrong !')
+            let errorMsg = data.error.message ||  'Authentication failed!'  ;
+            throw new Error(errorMsg)
           }
         }catch(error){
-          setError(error)
+          setError(error.message)
         }
      }else{
         setError('Passwords do not match. Please try again.')
      }
+    }else{
+        try{
+            let response = await fetch(`${URL_LOGIN}`,{
+              method:'POST',
+              body:JSON.stringify({
+                  email:user.email,
+                  password:user.password,
+                  returnSecureToken:true
+              }),
+              headers:{'Content-Type':'application/json'}
+            })
+            let data = await response.json()
+            if(response.ok){
+              alert('You have successfully logged in')
+              console.log('res--',data)
+              localStorage.setItem('token',JSON.stringify(data.idToken))
+            }else{
+                let errorMsg = data.error.message ||  'Authentication failed!'  ;
+                throw new Error(errorMsg)
+            }
+          }catch(error){
+            setError(error.message)
+          }
+
+    }
     
     setUser({email:'',password:'',confirmPassword:''})
   };
@@ -56,7 +91,7 @@ const Login = () => {
             type="email"
             placeholder="Email"
             value={user.email}
-            onChange={(e) => setUser({...user,[e.target.name]:e.target.value})}
+            onChange={handleChange}
             required
           />
         </div>
@@ -71,7 +106,7 @@ const Login = () => {
             placeholder="Password"
             value={user.password}
             required
-            onChange={(e) => setUser({...user,[e.target.name]:e.target.value})}
+            onChange={handleChange}
           />
         </div>
         {!isSignup && <div className="mb-6">
@@ -84,7 +119,7 @@ const Login = () => {
             type="password"
             placeholder="Confirm Password"
             value={user.confirmPassword}
-            onChange={(e) => setUser({...user,[e.target.name]:e.target.value})}
+            onChange={handleChange}
             required
           />
         </div> }
