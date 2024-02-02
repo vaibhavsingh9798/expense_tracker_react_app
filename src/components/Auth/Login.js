@@ -1,6 +1,7 @@
 // components/Auth/Login.jsx
 
 import React, { useState } from 'react';
+import { NavLink, Navigate, useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [isSignup,setIsSignup] = useState(false)
@@ -11,6 +12,7 @@ const Login = () => {
   const URL_SIGNUP = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`
   const URL_LOGIN = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${API_KEY}`
 
+   let navigate = useNavigate()
 const handleChange = (e) =>{
     setError('')
     setUser({...user,[e.target.name]:e.target.value})
@@ -63,6 +65,7 @@ const handleChange = (e) =>{
               alert('You have successfully logged in')
               console.log('res--',data)
               localStorage.setItem('token',JSON.stringify(data.idToken))
+              navigate('/profile')
             }else{
                 let errorMsg = data.error.message ||  'Authentication failed!'  ;
                 throw new Error(errorMsg)
