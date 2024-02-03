@@ -7,6 +7,7 @@ const Login = () => {
   const [isSignup,setIsSignup] = useState(false)
   const [user,setUser] = useState({email:'',password:'',confirmPassword:''})
   const [error,setError] = useState('')
+  
 
   const API_KEY =  'AIzaSyDe422vlAnqibSzAxFe3D3N7eFp2hQxxbg'
   const URL_SIGNUP = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`
@@ -21,7 +22,7 @@ const handleChange = (e) =>{
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log('Logging in with:', user);
-    if(!isSignup){
+    if(!isSignup){ 
      if(user.password === user.confirmPassword){
         try{
           let response = await fetch(`${URL_SIGNUP}`,{
@@ -65,7 +66,7 @@ const handleChange = (e) =>{
               alert('You have successfully logged in')
               console.log('res--',data)
               localStorage.setItem('token',JSON.stringify(data.idToken))
-              navigate('/profile')
+              navigate('/verify-email')
             }else{
                 let errorMsg = data.error.message ||  'Authentication failed!'  ;
                 throw new Error(errorMsg)
