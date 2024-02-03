@@ -1,41 +1,58 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 
 const Profile = () =>{
     const [isCompleteMode,setIsCompeleteMode] = useState(false)
     const [profileDetails,setProfileDetails] = useState({fullName:'',photoUrl:''})
 
-    const API_KEY = `AIzaSyDe422vlAnqibSzAxFe3D3N7eFp2hQxxbg`
-    let URL = `https://identitytoolkit.googleapis.com/v1/accounts:update?key=${API_KEY}`
+    const API_KEY = 'AIzaSyDe422vlAnqibSzAxFe3D3N7eFp2hQxxbg'
+    let UPDATE_URL = `https://identitytoolkit.googleapis.com/v1/accounts:update?key=${API_KEY}`
+    let GET_URL = `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${API_KEY}`
+
+    const token = JSON.parse(localStorage.getItem('token'))
 
     const handleUpdate = async (e) =>{
          e.preventDefault();
-   
-         let token = localStorage.getItem('token')
-      console.log('sub',profileDetails,token)
-         try{
-         let response = await fetch(`${URL}`,{
-            method: 'POST',
-            body: JSON.stringify({
-                idToken:token,
-                displayName:profileDetails.fullName,
-                photoUrl: profileDetails.photoUrl,
-                returnSecureToken:true,
-            }),
-            headers:{'Content-Type':'application/json'}
-         })
-         
-         if(response.ok){
-         alert('successful updated!')
-         let data = await response.json()
-         console.log('data--',data)
+         const payload = {
+            idToken:token,
+            displayName:profileDetails.fullName,
+            photoUrl:profileDetails.photoUrl,
+            deleteAttribute:[],
+            returnSecureToken:false,
          }
-         }catch(error){
-            console.error(error)
-         }
-       
-         setProfileDetails({fullName:'',photoUrl:''})
+          try{
+            let response = await fetch(`${UPDATE_URL}`,{
+                method:'POST',
+                body: JSON.stringify(payload),
+                headers: {'Content-Type': 'application/json'}
+            })
+             if(response.ok)
+             alert('success')
+          }catch(err){
+            console.error(err)
+          }
     }
+
+    const  fetchProfile = async ()=>{
+        try{
+          let response = await fetch(`${GET_URL}`,{
+            method:'POST',
+            body:JSON.stringify({idToken:token}),
+            headers:{'Content-Type':'application/json'}
+          })
+          if(response.ok){
+            let data = await response.json()
+            let {displayName,photoUrl} = data.users[0]
+            setProfileDetails({fullName:displayName,photoUrl:photoUrl})
+          }
+        }catch(err){
+            console.error(err)
+        }
+    }
+
+    useEffect(()=>{
+       fetchProfile()
+    },[])
 
      const lander = () =>{
         return(
