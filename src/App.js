@@ -1,19 +1,21 @@
 import Login from "./components/Auth/Login";
 import VerifyEmail from "./components/Auth/VerifyEmail";
+import Home from "./components/Home/Home";
 import Profile from "./components/Profile/Profile";
-import {BrowserRouter as Router , Routes, Route} from "react-router-dom"
+import {Routes, Route} from "react-router-dom"
 
 function App() {
   return (
-     <div>
-      <h2>Hello Word</h2>
-         <Router>
+     <div className="min-h-screen">
+       <Home/>
+      <div className="container mx-auto p-4"> 
           <Routes>
             <Route path='/auth' element={<Login/>} />
             <Route path='/profile' element={<Profile />} />
             <Route path='/verify-email' element={<VerifyEmail />} />
           </Routes>
-         </Router>
+       
+         </div>
      </div>
   );
 }
