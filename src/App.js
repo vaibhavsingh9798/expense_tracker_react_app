@@ -1,6 +1,7 @@
 import ForgotPassword from "./components/Auth/ForgotPassword";
 import Login from "./components/Auth/Login";
 import VerifyEmail from "./components/Auth/VerifyEmail";
+import Expense from "./components/Expense/Expense";
 import Home from "./components/Home/Home";
 import Profile from "./components/Profile/Profile";
 import {Routes, Route} from "react-router-dom"
@@ -15,6 +16,7 @@ function App() {
             <Route path='/profile' element={<Profile />} />
             <Route path='/verify-email' element={<VerifyEmail />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/expense" element={<Expense/>} />
           </Routes>
        
          </div>

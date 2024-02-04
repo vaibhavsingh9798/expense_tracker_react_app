@@ -4,6 +4,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 const ForgotPassword = () =>{
     const [error,setEroor] = useState('')
     const [email,setEmail] = useState('')
+    const [loading,setLoading] = useState(false)
     
     const API_KEY =  'AIzaSyDe422vlAnqibSzAxFe3D3N7eFp2hQxxbg'
     const URL = `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${API_KEY}`
@@ -11,7 +12,7 @@ const ForgotPassword = () =>{
     const navigate = useNavigate()
     const handleSubmit = async (e) => {
        e.preventDefault();
-       console.log('email',email);
+       setLoading(true)
        try{
         let response = await fetch(URL,{
            method:'POST',
@@ -24,6 +25,7 @@ const ForgotPassword = () =>{
        }catch(err){
         setEroor(err.message)
        }
+       setLoading(false)
     }
     return(
         <div className="flex justify-center items-center h-screen bg-gradient-to-r from-blue-500 to-indigo-600">
@@ -48,7 +50,7 @@ const ForgotPassword = () =>{
             className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="submit"
           >
-            Send Link
+         {loading ? 'Loading....' :  'Send Link'}
           </button>
         </div>
         <div className='mt-4'>

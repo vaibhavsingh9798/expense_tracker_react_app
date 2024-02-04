@@ -22,7 +22,10 @@ const Home = () =>{
         <div class="bg-gray-500 p-4"> 
     <div class="container mx-auto flex justify-between items-center">
         <div>
-       <NavLink>Home</NavLink>
+       <NavLink to='/'>Home</NavLink>
+        </div>
+        <div>
+       <NavLink to='/expense'>Expense</NavLink>
         </div>
 
         <div class="mr-9">
