@@ -1,9 +1,12 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const AddExpense = () =>{
     const [expense,setExpense] = useState({amount:0,description:'',category:''})
     const [error,setError] = useState('')
+    const URL = `https://expense-tracker-app-7c9d2-default-rtdb.firebaseio.com`
 
+    const navigate = useNavigate()
     const handleChange = (e)=>{
         setExpense({...expense,[e.target.name]:e.target.value})
     }
@@ -11,7 +14,25 @@ const AddExpense = () =>{
     const handleSubmit = async(e) =>{
       e.preventDefault();
       console.log('exp..',expense)
+      if(expense.amount && expense.category){
+        try{
+      let response = await fetch(`${URL}/expense.json`,{
+        method:'POST',
+        body: JSON.stringify({expense}),
+        headers:{'Content-Type':'application/json'}
+      })
+      if(response.ok){
+        navigate('/home')  
+      }
       setExpense({amount:0,description:'',category:''})
+    }catch(err){
+        setError(err.message)
+    }
+
+}
+    else{
+        setError('Fill required field!')
+    }
     }
     return(
         <div className="flex justify-center items-center h-screen">
