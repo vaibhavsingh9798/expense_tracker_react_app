@@ -128,7 +128,10 @@ const handleChange = (e) =>{
           />
         </div> }
         
-        <div className="flex items-center justify-center">
+        <div className="flex flex-col items-center justify-center">
+        { isSignup && <div className='mb-2'>
+         <NavLink to='/forgot-password'> Forgot password? </NavLink>
+         </div>}
           <button
             className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="submit"
