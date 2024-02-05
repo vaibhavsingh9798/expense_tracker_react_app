@@ -1,60 +1,39 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import React from "react";
-const AddExpense = ({updateValue}) =>{
 
+const AddExpense = () =>{
     const [expense,setExpense] = useState({amount:0,description:'',category:''})
-    const [isUpadte,setIsUpdate] = useState(false)
     const [error,setError] = useState('')
     const URL = `https://expense-tracker-app-7c9d2-default-rtdb.firebaseio.com`
 
-    // const navigate = useNavigate()
-   
-    const handleChange =  (e)=>{
+    const navigate = useNavigate()
+    const handleChange = (e)=>{
         setExpense({...expense,[e.target.name]:e.target.value})
     }
 
-    const handleSubmit = async () =>{
+    const handleSubmit = async(e) =>{
+      e.preventDefault();
+      console.log('exp..',expense)
       if(expense.amount && expense.category){
         try{
-          if(!isUpadte){
       let response = await fetch(`${URL}/expense.json`,{
         method:'POST',
         body: JSON.stringify({expense}),
         headers:{'Content-Type':'application/json'}
       })
       if(response.ok){
-        console.log('res',response)
-        //navigate('/expense')  
+        navigate('/home')  
       }
-    }else if(isUpadte){
-      let id = updateValue.id;
-      let response = await fetch(`${URL}/expense/${id}.json`,{
-        method:'PUT',
-        body: JSON.stringify({expense}),
-        headers:{'Content-Type':'application/json'}
-      })
-      if(response.ok){
-        console.log('up..')
-       // navigate('/expense')  
-      }
-    }
       setExpense({amount:0,description:'',category:''})
     }catch(err){
         setError(err.message)
     }
-   } else{
+
+}
+    else{
         setError('Fill required field!')
     }
     }
-
-    useEffect(()=>{
-      if(updateValue){
-        setIsUpdate(true)
-        setExpense(updateValue)
-      }
-    },[])
-
     return(
         <div className="flex justify-center items-center h-screen">
         <form className="bg-zinc-100 shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 w-96" onSubmit={handleSubmit}>
@@ -108,7 +87,7 @@ const AddExpense = ({updateValue}) =>{
               className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="submit"
             >
-           {isUpadte ? 'Update' : 'Add'}  
+             Add
             </button>
           </div>
           <div className='mt-4'>
@@ -119,4 +98,4 @@ const AddExpense = ({updateValue}) =>{
     )
 }
 
-export default React.memo(AddExpense);
+export default AddExpense;
