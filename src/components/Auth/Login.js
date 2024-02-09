@@ -2,6 +2,8 @@
 
 import React, { useState } from 'react';
 import { NavLink, Navigate, useNavigate } from 'react-router-dom';
+import {useDispatch} from 'react-redux'
+import {login,logout} from '../../features/authentication/authSlice'
 
 const Login = () => {
   const [isSignup,setIsSignup] = useState(false)
@@ -14,6 +16,7 @@ const Login = () => {
   const URL_LOGIN = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${API_KEY}`
 
    let navigate = useNavigate()
+   let dispatch = useDispatch()
 const handleChange = (e) =>{
     setError('')
     setUser({...user,[e.target.name]:e.target.value})
@@ -64,8 +67,9 @@ const handleChange = (e) =>{
             let data = await response.json()
             if(response.ok){
               alert('You have successfully logged in')
-              console.log('res--',data)
-              localStorage.setItem('token',JSON.stringify(data.idToken))
+              let token = JSON.stringify(data.idToken)
+              dispatch(login({token})) 
+             // localStorage.setItem('token',JSON.stringify(data.idToken))
               navigate('/verify-email')
             }else{
                 let errorMsg = data.error.message ||  'Authentication failed!'  ;

@@ -1,6 +1,7 @@
 import ForgotPassword from "./components/Auth/ForgotPassword";
 import Login from "./components/Auth/Login";
 import VerifyEmail from "./components/Auth/VerifyEmail";
+import AddExpense from "./components/Expense/AddExpense";
 import Expense from "./components/Expense/Expense";
 import Home from "./components/Home/Home";
 import Profile from "./components/Profile/Profile";
@@ -16,7 +17,9 @@ function App() {
             <Route path='/profile' element={<Profile />} />
             <Route path='/verify-email' element={<VerifyEmail />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/expense" element={<Expense/>} />
+            <Route  path="/expenses" element={<Expense/>} />
+            <Route  path="/expenses/add" element={<AddExpense mode="add" />} />
+            <Route  path="/expenses/update/:expenseId" element={<AddExpense mode="update" />} />
           </Routes>
        
          </div>
