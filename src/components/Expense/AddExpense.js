@@ -12,7 +12,7 @@ const AddExpense = ({mode}) =>{
     const navigate = useNavigate()
     const {expenseId} = useParams() || null;
     let expenses = useSelector((state) => state.expense.expenses)
-
+    let isDarkMode = useSelector((state) => state.darkMode.isDarkMode)
     const handleChange =  (e)=>{
         setExpense({...expense,[e.target.name]:e.target.value})
         setError('')
@@ -76,16 +76,17 @@ const AddExpense = ({mode}) =>{
      },[])
 
     return(
-        <div className="flex justify-center items-center h-screen">
-        <form className="bg-zinc-100 shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 w-96" onSubmit={handleSubmit}>
-          <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">{mode === 'add' ? 'Add Expense' : 'Update Expense'} </h2>
+        <div className={`flex justify-center items-center h-screen ${isDarkMode ? 'bg-slate-800 text-slate-400' : 'bg-green-300'}`}>
+        <form className={` shadow-md  rounded-lg px-8 pt-6 pb-8 mb-4 w-96 ${isDarkMode ? 'bg-slate-800 text-slate-400' : 'bg-green-200'}`} onSubmit={handleSubmit}>
+          
+          <h2 className="text-3xl font-bold mb-6 text-center">{mode === 'add' ? 'Add Expense' : 'Update Expense'} </h2>
         
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="amount">
+            <label className="block  text-sm font-bold mb-2" htmlFor="amount">
              Amount
             </label>
             <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-200 text-gray-900 leading-tight focus:outline-none focus:shadow-outline "
+              className="shadow  appearance-none border rounded w-full py-2 px-3  leading-tight focus:outline-none focus:shadow-outline "
               name="amount"
               type="text"
               placeholder="Amount"
@@ -95,11 +96,11 @@ const AddExpense = ({mode}) =>{
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="description">
+            <label className="block  text-sm font-bold mb-2" htmlFor="description">
               Description
             </label>
             <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-200 text-gray-900 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded w-full py-2 px-3  leading-tight focus:outline-none focus:shadow-outline"
               name="description"
               type="text"
               placeholder="Description"
@@ -108,11 +109,11 @@ const AddExpense = ({mode}) =>{
             />
           </div>
         <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="cateogry">
+            <label className="block  text-sm font-bold mb-2" htmlFor="cateogry">
               Category
             </label>
             <select
-              className="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-200 text-gray-900 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded w-full py-2 px-3  leading-tight focus:outline-none focus:shadow-outline"
               name="category"
               value={expense.category}
               onChange={handleChange}
@@ -136,6 +137,7 @@ const AddExpense = ({mode}) =>{
           <div className='mt-4'>
           {error && <p className='text-red-500 mt-2'>{error}</p>}
           </div>
+         
         </form>
       </div>
     )

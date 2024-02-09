@@ -10,8 +10,10 @@ const Expense = () =>{
 
     const navigate = useNavigate()
     let expenses = useSelector((state) => state.expense.expenses)
+    console.log('exp.2',expenses)
     let dispatch = useDispatch()
-
+    let isDarkMode = useSelector((state) => state.darkMode.isDarkMode)
+    console.log('mode',isDarkMode)
      const fetchExpenses = async () =>{
         let data;
         try{
@@ -55,8 +57,8 @@ const Expense = () =>{
     const printExpense = () =>{
       return(
         <div>
-        <div className="flex  justify-center">
-          <table className="table-auto border-separate border-spacing-20 border border-slate-500 bg-green-200">
+        <div className="flex  justify-center ">
+          <table className={`table-auto border-separate border-spacing-20 border border-slate-500  ${isDarkMode ? 'bg-slate-800 text-slate-400' : 'bg-green-200'} `}>
             <thead>
               <tr>
               <th class="">Amount</th>
@@ -91,7 +93,7 @@ const Expense = () =>{
     }
 
     return(
-        <div className="bg-green-300 h-screen">
+        <div className={`g-green-30b0 h-screen ${isDarkMode ? 'bg-slate-800 text-slate-400' : 'bg-green-300'}`}>
          {printExpense()}
         </div>
     )
