@@ -10,11 +10,11 @@ const Expense = () =>{
 
     const navigate = useNavigate()
     let expenses = useSelector((state) => state.expense.expenses)
-    console.log('exp.2',expenses)
+
     let dispatch = useDispatch()
     let isDarkMode = useSelector((state) => state.darkMode.isDarkMode)
-    console.log('mode',isDarkMode)
-     const fetchExpenses = async () =>{
+
+     const fetchExpense = async () =>{
         let data;
         try{
           let response = await fetch(`${URL}/expense.json`)
@@ -41,7 +41,7 @@ const Expense = () =>{
           method:'DELETE',
         })
         if(response.ok){
-          fetchExpenses()
+          fetchExpense()
         }
         else
         throw new Error('something wrong with delete!')
@@ -51,7 +51,7 @@ const Expense = () =>{
      }
 
     useEffect(()=>{
-        fetchExpenses()
+        fetchExpense()
     },[])
 
     const printExpense = () =>{
@@ -77,7 +77,7 @@ const Expense = () =>{
                     <td>{expense.description}</td>
                     <td>{expense.category}</td>
                     <td><NavLink to={`/expenses/update/${expense.id}`}><button className="bg-blue-400 text-white font-bold rounded-md p-1">Edit</button></NavLink></td>
-                    <td><button className="bg-red-400 text-white font-bold rounded-md p-1" onClick={(e)=>handleDelete(e,expense)}>Delete</button></td>
+                    <td><button className="bg-red-600 text-white font-bold rounded-md p-1" onClick={(e)=>handleDelete(e,expense)}>Delete</button></td>
                    </tr>
                )
                 })
